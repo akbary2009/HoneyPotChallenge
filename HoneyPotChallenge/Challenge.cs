@@ -6,6 +6,26 @@ namespace HoneyPotChallenge
 {
     public class Challenge
     {
+        private static readonly string[] validSubjects = new[] { "Physics", "Chemistry", "Math", "Botany", "Zoology" };
+
+        public static int MinPossibleClasses(string skills)
+        {
+            if (string.IsNullOrEmpty(skills))
+                return default;
+
+            var validSkills = validSubjects.Select(vs => vs.Substring(0, 1).ToLower());
+            var availableSkills = skills
+                .Select(skill => skill.ToString().ToLower())
+                .Where(skill => validSkills.Contains(skill));
+
+            if (!validSkills.All(skill => availableSkills.Contains(skill)))
+                return default;
+
+            return availableSkills
+                .GroupBy(skill => skill)
+                .Min(g => g.Count());
+        }
+
         public static int MinCans(List<int> used, List<int> total)
         {
             if (total.Count != used.Count)
